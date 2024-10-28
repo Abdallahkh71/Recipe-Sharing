@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="css/homeStyle.css" />
     <!-- MDB -->
     <link rel="stylesheet" href="css/mdb.min.css" />
+    <script src="https://www.youtube.com/iframe_api"></script>
+
 </head>
 
 <style>
@@ -168,7 +170,7 @@
                 </a>
                 <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
+                    <i class="fas fa-bars text-white fs-4"></i>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarNav">
                     <ul class="navbar-nav ms-auto gap-4 ">
@@ -303,7 +305,6 @@
                             </div>
                         </div>
                 </div> -->
-            </div>
         </div>
     </section>
     <!--end main content  -->
@@ -500,11 +501,34 @@
                                     </ol>
                                     <!-- Additional Info -->
                                     <div class="mt-3">
-                                        <h6 class="d-flex align-items-center gap-3">Recipe video:
-                                            <a class="btn text-white text-nowrap" data-mdb-ripple-init style="background-color: #ff9638;" href="${meal[0].strYoutube}" role="button">
+                                        <!-- Video Modal -->
+                                            <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header d-flex align-items-center" style="background-color:#ff9638">
+                                                            <img src="./imgs/logo-white.png" class="img-fluid w-25" >
+                                                            <h5 class="modal-title text-white px-5 flex-grow-1" id="videoModalLabel">Recipe Video</h5>
+                                                            <button type="button" class="btn-close btn-close-white" onclick="closeModalAndStopVideo()" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="ratio ratio-16x9">
+                                                                <iframe id="videoIframe" src="" title="YouTube video player" frameborder="0"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                    allowfullscreen></iframe>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer" style="background-color:#ff9638">
+                                                            <button type="button" class="btn btn-outline-light text-dark" onclick="closeModalAndStopVideo()">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <h6 class="d-flex align-items-center gap-3">Recipe video :
+                                            <button class="btn text-white text-nowrap" style="background-color: #ff9638;"
+                                                onclick="openVideoModal('${meal[0].strYoutube}')">
                                                 <i class="fab fa-youtube me-2"></i>
                                                 Recipe Video
-                                            </a>
+                                            </button>
                                         </h6>
                                         <h6>Difficulty: Easy</h6>
                                     </div>
@@ -642,22 +666,110 @@
                     </ol>
                     <!-- Additional Info -->
                     <div class="mt-3">
-                        <h6 class="d-flex align-items-center gap-3">Recipe video:
-                            <a class="btn text-white text-nowrap" data-mdb-ripple-init style="background-color: #ff9638;" href="${meal.strYoutube}" role="button">
-                                <i class="fab fa-youtube me-2"></i>
-                                Recipe Video
-                            </a>
-                        </h6>
+                    <!-- Video Modal -->
+                    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                    <div class="modal-header d-flex align-items-center" style="background-color:#ff9638">
+                                        <img src="./imgs/logo-white.png" class="img-fluid w-25" >
+                                        <h5 class="modal-title text-white px-5 flex-grow-1" id="videoModalLabel">Recipe Video</h5>
+                                        <button type="button" class="btn-close btn-close-white" onclick="closeModalAndStopVideo()" aria-label="Close"></button>
+                                    </div>
+                                <div class="modal-body">
+                                    <div class="ratio ratio-16x9">
+                                        <iframe id="videoIframe" src="" title="YouTube video player" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="background-color:#ff9638">
+                                    <button type="button" class="btn btn-outline-light text-dark" onclick="closeModalAndStopVideo()">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <h6 class="d-flex align-items-center gap-3">Recipe video :
+                        <button class="btn text-white text-nowrap" style="background-color: #ff9638;"
+                            onclick="openVideoModal('${meal.strYoutube}')">
+                            <i class="fab fa-youtube me-2"></i>
+                            Recipe Video
+                        </button>
+                    </h6>
                         <h6>Difficulty: Easy</h6>
                     </div>
                 </div>
             </div>
         </div>
     `;
-
             // Set up the rating functionality after the stars are added to the DOM
             setupRatingFunctionality();
-        }
+        } 
+        
+        let player; // Global player variable
+
+            // This function is called by the YouTube IFrame API
+            function onYouTubeIframeAPIReady() {
+                console.log("YouTube IFrame API is ready");
+                player = new YT.Player('videoIframe', {
+                    events: {
+                        'onReady': onPlayerReady,
+                    }
+                });
+            }
+
+            function onPlayerReady(event) {
+                console.log("Player is ready");
+            }
+
+            function openVideoModal(youtubeUrl) {
+                // Extract the YouTube video ID from the URL
+                const videoId = youtubeUrl.split("v=")[1]?.split("&")[0]; // Handle additional parameters
+                if (!videoId) {
+                    console.warn("Invalid YouTube URL");
+                    return;
+                }
+                const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`; // Enable JS API
+
+                // Set the iframe src to the embedded URL
+                document.getElementById("videoIframe").src = embedUrl;
+
+                // Show the modal with static backdrop (prevent closing on outside click)
+                const videoModal = new mdb.Modal(document.getElementById('videoModal'), { backdrop: 'static' });
+                videoModal.show();
+            }
+
+            // Function to close the modal and stop the video
+            function closeModalAndStopVideo() {
+                if (player && typeof player.pauseVideo === "function") {
+                    player.pauseVideo(); // Stop the video using the YouTube API
+                    console.log("Video paused");
+                } else {
+                    console.warn("Player is not initialized or pauseVideo is not a function");
+                }
+                document.getElementById("videoIframe").src = ""; // Clear the iframe source
+
+                // Hide the modal explicitly if needed
+                const videoModal = mdb.Modal.getInstance(document.getElementById('videoModal'));
+                if (videoModal) {
+                    videoModal.hide();
+                }
+            }
+
+            // Add listener for when the modal is hidden
+            const videoModalElement = document.getElementById('videoModal');
+            if (videoModalElement) {
+                videoModalElement.addEventListener('hidden.mdb.modal', function () {
+                    console.log("Modal hidden - triggering close function");
+                    closeModalAndStopVideo(); // Call the same function when modal is hidden
+                });
+            }
+
+            // Attach close function to the close button in the modal header
+            document.querySelector('.btn-close[data-mdb-dismiss="modal"]').addEventListener('click', closeModalAndStopVideo);
+
+
+
 
 
 </script>
@@ -667,3 +779,77 @@
 </body>
 
 </html>
+
+
+
+<!-- 
+
+
+
+
+
+
+let player; // Global player variable
+
+    // This function is called by the YouTube IFrame API
+    function onYouTubeIframeAPIReady() {
+        console.log("YouTube IFrame API is ready");
+        player = new YT.Player('videoIframe', {
+            events: {
+                'onReady': onPlayerReady,
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        console.log("Player is ready");
+    }
+
+    function openVideoModal(youtubeUrl) {
+        // Extract the YouTube video ID from the URL
+        const videoId = youtubeUrl.split("v=")[1].split("&")[0]; // Handle additional parameters
+        const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`; // Enable JS API
+
+        // Set the iframe src to the embedded URL
+        document.getElementById("videoIframe").src = embedUrl;
+
+        // Show the modal (using MDB's method)
+        const videoModal = new mdb.Modal(document.getElementById('videoModal'));
+        videoModal.show();
+    }
+
+    // Function to close the modal and stop the video
+    function closeModalAndStopVideo() {
+        if (player && typeof player.pauseVideo === "function") {
+            player.pauseVideo(); // Stop the video using the YouTube API
+            console.log("Video paused");
+        } else {
+            console.warn("Player is not initialized or pauseVideo is not a function");
+        }
+        document.getElementById("videoIframe").src = ""; // Clear the iframe source
+
+        // Hide the modal explicitly
+        const videoModal = mdb.Modal.getInstance(document.getElementById('videoModal'));
+        if (videoModal) {
+            videoModal.hide(); // Hide the modal explicitly
+        }
+    }
+
+    // Add listener for when the modal is hidden
+    const videoModalElement = document.getElementById('videoModal');
+    if (videoModalElement) {
+        videoModalElement.addEventListener('hidden.mdb.modal', function () {
+            closeModalAndStopVideo(); // Call the same function when modal is hidden
+        });
+    }
+
+    // Optional: Attach close function to the close button in the modal header
+    document.querySelector('.btn-close[data-mdb-dismiss="modal"]').addEventListener('click', closeModalAndStopVideo);
+
+
+
+
+
+
+
+-->

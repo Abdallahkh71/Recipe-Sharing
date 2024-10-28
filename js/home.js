@@ -69,17 +69,23 @@ async function getRandomItems() {
     try {
         let response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
         if (!response.ok) {
-            throw ("Network response is not ok " + response.statusText);
+            throw new Error("Network response is not ok: " + response.statusText);
         }
-        let data = await response.json();
-        let item = data.meals[0];
-        // console.log(item)
-        RandomDataApi.push(item);
 
+        let data = await response.json();
+        if (data.meals && data.meals[0]) {
+            console.log("Fetched item:", data.meals[0]);
+            return data.meals[0];
+        } else {
+            console.warn("API returned an unexpected result:", data);
+            return null;
+        }
     } catch (error) {
         console.error("There is a problem with the fetch operation:", error);
+        return null;
     }
 }
+
 
 function displayCarouselItem() {
     let carouselItems = document.getElementById("carouselContent");
@@ -105,17 +111,11 @@ function displayCarouselItem() {
                         <p class="m-0">${RandomDataApi[i].strCategory}</p>
                     </li>
                 </ul>
-                <ul class="links list-unstyled mt-4 d-flex justify-content-center gap-2">
+                <ul class="links list-unstyled mt-4 d-flex justify-content-center ">
                     <li>
                         <a class="btn text-white text-nowrap" data-mdb-ripple-init style="background-color: #ff9638;" href="recipe-details.html?recipe=${RandomDataApi[i].idMeal}" role="button">
                             <i class="fa-solid fa-arrow-right  me-2"></i>
                             View Recipe
-                        </a>
-                    </li>
-                    <li class="ms-3">
-                        <a class="btn text-white text-nowrap" data-mdb-ripple-init style="background-color: #ff9638;" href="${RandomDataApi[i].strYoutube}" role="button">
-                            <i class="fab fa-youtube me-2"></i>
-                            Recipe Video
                         </a>
                     </li>
                 </ul>
@@ -424,16 +424,34 @@ function displayRecommendedRecipes() {
 }
 
 async function callingOrder() {
-    for (let i = 0; i < 24; i++) {
-        await getRandomItems();
-        // console.log(RandomDataApi[i]);
+    try {
+        // Create an array of 24 promises for fetching random items
+        const promises = Array.from({ length: 24 }, () => getRandomItems());
+
+        // Wait for all promises to resolve
+        const results = await Promise.all(promises);
+
+        // Filter out any null or undefined results and push them into RandomDataApi
+        RandomDataApi = results.filter(item => item && item.strMeal);
+
+        console.log("Valid items in RandomDataApi:", RandomDataApi);
+    } catch (error) {
+        console.error("Error fetching random items:", error);
     }
-    await displayCarouselItem();
-    await recipesTypesData();
-    await mostPopularRecipes();
-    await displayClientTestimonials();
-    await displayChiefs();
-    await displayRecommendedRecipes();
-    console.log(RandomDataApi.length);
+
+    // Call functions only if RandomDataApi has valid data
+    if (RandomDataApi.length) {
+        await displayCarouselItem();
+        await recipesTypesData();
+        await mostPopularRecipes();
+        await displayClientTestimonials();
+        await displayChiefs();
+        await displayRecommendedRecipes();
+    } else {
+        console.warn("No valid data available to display.");
+    }
+
+    console.log("Final RandomDataApi length:", RandomDataApi.length);
 }
+
 callingOrder();
