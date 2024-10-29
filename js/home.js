@@ -1,8 +1,22 @@
-// loading
-setTimeout(() => {
-    document.querySelector('.loading-slider').style.opacity = "0";
-    document.querySelector('.loading-slider').style.zIndex = "-1";
-}, 3800);
+fetch('https://www.themealdb.com/api/json/v1/1/random.php')
+    .then((response) => response.json())
+    .then((data) => {
+        // Use the fetched data as needed
+        console.log("Fetched data:", data);
+    })
+    .finally(() => {
+        // Wait 1 seconds after the response ends, then hide the loading slider
+        setTimeout(() => {
+            document.querySelector('.loading-slider').style.opacity = "0";
+            document.querySelector('.loading-slider').style.zIndex = "-1";
+        }, 2000); //
+    })
+    .catch((error) => {
+        console.error("Error fetching data:", error);
+    });
+
+
+
 
 //navbar
 function initNavbarScroll() {

@@ -44,6 +44,28 @@ body {
     width:140px;
     margin: auto;
 }
+/* Custom Scrollbar Style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ff9638;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  /* z-index: -1; */
+  display: none;
+}
+
+/* Hide all scrollbars */
+/* .scrollbar-hidden ::-webkit-scrollbar {
+  display: none;
+} */
+
 /* end component */
 /* loading */
    .loading-slider {

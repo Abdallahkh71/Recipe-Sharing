@@ -392,33 +392,232 @@
         <script src="js/chief.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const recipeForm = document.getElementById('recipeForm');
+    //     const submitButton = document.getElementById('submit');
+
+    //     // Real-time validation functions
+    //     const showError = (elementId, message) => {
+    //         const element = document.getElementById(elementId);
+    //         element.textContent = message;
+    //         element.classList.remove('text-success'); // Remove success class on error
+    //         element.classList.add('text-danger'); // Add danger class for errors
+    //     };
+
+    //     const showSuccess = (elementId, message) => {
+    //         const element = document.getElementById(elementId);
+    //         element.textContent = message;
+    //         element.classList.remove('text-danger'); // Remove danger class on success
+    //         element.classList.add('text-success'); // Add success class for valid input
+    //     };
+
+    //     const clearError = (elementId) => {
+    //         const element = document.getElementById(elementId);
+    //         element.textContent = '';
+    //         element.classList.remove('text-danger', 'text-success'); // Clear both classes
+    //     };
+
+    //     // Input validation
+    //     const inputsToValidate = ['recipeName', 'prepTime', 'servings', 'cookTime', 'shelfLife', 'ingredients', 'directions', 'name', 'email'];
+
+    //     // Function to check if all inputs are valid
+    //     function checkFormValidity() {
+    //         let isValid = true;
+
+    //         inputsToValidate.forEach((inputId) => {
+    //             const inputElement = document.getElementById(inputId);
+    //             const errorElementId = inputId + 'Error';
+
+    //             if (!inputElement.value || document.getElementById(errorElementId).classList.contains('text-danger')) {
+    //                 isValid = false;
+    //             }
+    //         });
+
+    //         // Enable or disable submit button based on validity
+    //         submitButton.disabled = !isValid;
+    //     }
+
+    //     document.getElementById('recipeName').addEventListener('input', function () {
+    //         const value = this.value.trim();
+    //         if (value.length < 3) {
+    //             showError('recipeNameError', 'Recipe name must be at least 3 characters long.');
+    //         } else {
+    //             clearError('recipeNameError');
+    //             showSuccess('recipeNameError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('prepTime').addEventListener('input', function () {
+    //         const value = this.value;
+    //         if (value <= 0) {
+    //             showError('prepTimeError', 'Preparation time must be a positive number.');
+    //         } else {
+    //             clearError('prepTimeError');
+    //             showSuccess('prepTimeError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('servings').addEventListener('input', function () {
+    //         const value = this.value;
+    //         if (value <= 0) {
+    //             showError('servingsError', 'Number of servings must be a positive number.');
+    //         } else {
+    //             clearError('servingsError');
+    //             showSuccess('servingsError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('cookTime').addEventListener('input', function () {
+    //         const value = this.value;
+    //         if (value <= 0) {
+    //             showError('cookTimeError', 'Cooking time must be a positive number.');
+    //         } else {
+    //             clearError('cookTimeError');
+    //             showSuccess('cookTimeError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('shelfLife').addEventListener('input', function () {
+    //         const value = this.value;
+    //         if (value < 0) {
+    //             showError('shelfLifeError', 'Shelf life cannot be negative.');
+    //         } else {
+    //             clearError('shelfLifeError');
+    //             showSuccess('shelfLifeError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('ingredients').addEventListener('input', function () {
+    //         const value = this.value.trim();
+    //         if (value.length < 5) {
+    //             showError('ingredientsError', 'Ingredients must be at least 5 characters long.');
+    //         } else {
+    //             clearError('ingredientsError');
+    //             showSuccess('ingredientsError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('directions').addEventListener('input', function () {
+    //         const value = this.value.trim();
+    //         if (value.length < 5) {
+    //             showError('directionsError', 'Directions must be at least 5 characters long.');
+    //         } else {
+    //             clearError('directionsError');
+    //             showSuccess('directionsError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('name').addEventListener('input', function () {
+    //         const value = this.value.trim();
+    //         if (value.length < 3) {
+    //             showError('nameError', 'Your name must be at least 3 characters long.');
+    //         } else {
+    //             clearError('nameError');
+    //             showSuccess('nameError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     document.getElementById('email').addEventListener('input', function () {
+    //         const value = this.value.trim();
+    //         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    //         if (!emailPattern.test(value)) {
+    //             showError('emailError', 'Invalid email format.');
+    //         } else {
+    //             clearError('emailError');
+    //             showSuccess('emailError', 'Looks good!');
+    //         }
+    //         checkFormValidity();
+    //     });
+
+    //     // Add Recipe to Local Storage
+    //     document.getElementById('submit').addEventListener('click', function (e) {
+    //         e.preventDefault();
+
+    //         const recipe = {
+    //             recipeName: document.getElementById('recipeName').value,
+    //             dishType: document.getElementById('dishType').value,
+    //             prepTime: document.getElementById('prepTime').value,
+    //             servings: document.getElementById('servings').value,
+    //             cookTime: document.getElementById('cookTime').value,
+    //             shelfLife: document.getElementById('shelfLife').value,
+    //             difficulty: document.getElementById('difficulty').value,
+    //             ingredients: document.getElementById('ingredients').value,
+    //             directions: document.getElementById('directions').value,
+    //             name: document.getElementById('name').value,
+    //             email: document.getElementById('email').value,
+    //         };
+
+    //         if (validateRecipe(recipe)) {
+    //             let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    //             recipes.push(recipe);
+    //             localStorage.setItem('recipes', JSON.stringify(recipes));
+    //             // alert('Recipe added successfully!');
+    //              Swal.fire({
+    //                 title: 'Error!',
+    //                 text: 'Please fill in all fields correctly.',
+    //                 icon: 'error',
+    //                 confirmButtonText: 'Ok'
+    //             })
+    //         } else {
+    //             // alert('Please fill in all fields correctly.');
+    //             Swal.fire({
+    //                 position: "center",
+    //                 icon: "success",
+    //                 title: "Recipe added successfully!'",
+    //                 showConfirmButton: false,
+    //                 timer: 2000
+    //             });
+    //         }
+    //     });
+
+    //     // Validate the entire recipe object
+    //     function validateRecipe(recipe) {
+    //         return recipe.recipeName.length >= 3 &&
+    //             recipe.prepTime > 0 &&
+    //             recipe.servings > 0 &&
+    //             recipe.cookTime > 0 &&
+    //             recipe.shelfLife >= 0 &&
+    //             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(recipe.email) &&
+    //             recipe.ingredients.length >= 5 &&
+    //             recipe.directions.length >= 5 &&
+    //             recipe.name.length >= 3;
+    //     }
+    // });
+///////////////////////////
     document.addEventListener('DOMContentLoaded', function () {
         const recipeForm = document.getElementById('recipeForm');
         const submitButton = document.getElementById('submit');
+        const deleteButton = document.getElementById('delete'); // Assuming there's a delete button for the recipe
+        const inputsToValidate = ['recipeName', 'prepTime', 'servings', 'cookTime', 'shelfLife', 'ingredients', 'directions', 'name', 'email'];
 
         // Real-time validation functions
         const showError = (elementId, message) => {
             const element = document.getElementById(elementId);
             element.textContent = message;
-            element.classList.remove('text-success'); // Remove success class on error
-            element.classList.add('text-danger'); // Add danger class for errors
+            element.classList.remove('text-success');
+            element.classList.add('text-danger');
         };
 
         const showSuccess = (elementId, message) => {
             const element = document.getElementById(elementId);
             element.textContent = message;
-            element.classList.remove('text-danger'); // Remove danger class on success
-            element.classList.add('text-success'); // Add success class for valid input
+            element.classList.remove('text-danger');
+            element.classList.add('text-success');
         };
 
         const clearError = (elementId) => {
             const element = document.getElementById(elementId);
             element.textContent = '';
-            element.classList.remove('text-danger', 'text-success'); // Clear both classes
+            element.classList.remove('text-danger', 'text-success');
         };
-
-        // Input validation
-        const inputsToValidate = ['recipeName', 'prepTime', 'servings', 'cookTime', 'shelfLife', 'ingredients', 'directions', 'name', 'email'];
 
         // Function to check if all inputs are valid
         function checkFormValidity() {
@@ -437,6 +636,15 @@
             submitButton.disabled = !isValid;
         }
 
+        // Reset validation messages and styles
+        function resetValidation() {
+            inputsToValidate.forEach(inputId => {
+                clearError(inputId + 'Error');
+            });
+            checkFormValidity();
+        }
+
+        // Real-time validation for each field
         document.getElementById('recipeName').addEventListener('input', function () {
             const value = this.value.trim();
             if (value.length < 3) {
@@ -541,6 +749,9 @@
         document.getElementById('submit').addEventListener('click', function (e) {
             e.preventDefault();
 
+            // Reset validation messages and styles
+            resetValidation();
+
             const recipe = {
                 recipeName: document.getElementById('recipeName').value,
                 dishType: document.getElementById('dishType').value,
@@ -556,27 +767,55 @@
             };
 
             if (validateRecipe(recipe)) {
-                let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-                recipes.push(recipe);
-                localStorage.setItem('recipes', JSON.stringify(recipes));
-                // alert('Recipe added successfully!');
-                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Please fill in all fields correctly.',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            } else {
-                // alert('Please fill in all fields correctly.');
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Recipe added successfully!'",
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            }
+                        let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+                        recipes.push(recipe);
+                        localStorage.setItem('recipes', JSON.stringify(recipes));
+                        // alert('Recipe added successfully!');
+                         Swal.fire({
+                            title: 'Error!',
+                            text: 'Please fill in all fields correctly.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        })
+                    } else {
+                        // alert('Please fill in all fields correctly.');
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Recipe added successfully!'",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
         });
+
+        // Function to update a recipe and disable delete button
+        function updateRecipe(index) {
+            const recipes = JSON.parse(localStorage.getItem('recipes'));
+            const recipe = recipes[index];
+
+            // Populate form fields with recipe data
+            document.getElementById('recipeName').value = recipe.recipeName;
+            document.getElementById('prepTime').value = recipe.prepTime;
+            document.getElementById('servings').value = recipe.servings;
+            document.getElementById('cookTime').value = recipe.cookTime;
+            document.getElementById('shelfLife').value = recipe.shelfLife;
+            document.getElementById('ingredients').value = recipe.ingredients;
+            document.getElementById('directions').value = recipe.directions;
+            document.getElementById('name').value = recipe.name;
+            document.getElementById('email').value = recipe.email;
+
+            // Disable delete button during update
+            deleteButton.disabled = true;
+
+            // Modify the form submission for updating the recipe
+            submitButton.addEventListener('click', function updateRecipeInStorage() {
+                recipes[index] = recipe;
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                deleteButton.disabled = false; // Re-enable delete button after update
+                submitButton.removeEventListener('click', updateRecipeInStorage); // Prevent multiple bindings
+            });
+        }
 
         // Validate the entire recipe object
         function validateRecipe(recipe) {
