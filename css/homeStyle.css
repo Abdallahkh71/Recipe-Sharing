@@ -62,9 +62,9 @@ body {
 }
 
 /* Hide all scrollbars */
-/* .scrollbar-hidden ::-webkit-scrollbar {
+ .scrollbar-hidden ::-webkit-scrollbar {
   display: none;
-} */
+} 
 
 /* end component */
 /* loading */
